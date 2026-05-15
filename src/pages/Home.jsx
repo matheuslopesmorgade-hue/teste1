@@ -58,63 +58,64 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Search Bar - Glassmorphism */}
-        <div className="container search-container-wrapper animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <div className="search-bar glass">
-            <div className="search-group">
-              <label>Tipo do Imóvel</label>
-              <select>
-                <option>Todos</option>
-                <option>Casa em Condomínio</option>
-                <option>Apartamento</option>
-                <option>Cobertura</option>
-                <option>Comercial</option>
-              </select>
-            </div>
-            
-            <div className="search-group">
-              <label>Finalidade</label>
-              <select>
-                <option>Comprar</option>
-                <option>Alugar</option>
-              </select>
-            </div>
-            
-            <div className="search-group">
-              <label>Localização</label>
-              <input type="text" placeholder="Bairro ou Cidade" />
-            </div>
+      </section>
 
-            <div className="search-group">
-              <label>Faixa de preço</label>
-              <select>
-                <option>Qualquer valor</option>
-                <option>Até R$ 1 Milhão</option>
-                <option>R$ 1M a R$ 5M</option>
-                <option>Acima de R$ 5M</option>
-              </select>
-            </div>
+      {/* Search Bar - Glassmorphism */}
+      <div className="search-container-wrapper glass animate-fade-in" style={{ animationDelay: '0.2s' }}>
+        <div className="search-form">
+          <div className="search-group">
+            <label>Tipo do Imóvel</label>
+            <select>
+              <option>Todos</option>
+              <option>Casa em Condomínio</option>
+              <option>Apartamento</option>
+              <option>Cobertura</option>
+              <option>Comercial</option>
+            </select>
+          </div>
+          
+          <div className="search-group">
+            <label>Finalidade</label>
+            <select>
+              <option>Comprar</option>
+              <option>Alugar</option>
+            </select>
+          </div>
+          
+          <div className="search-group">
+            <label>Localização</label>
+            <input type="text" placeholder="Bairro ou Cidade" />
+          </div>
 
-            <div className="search-group">
-              <label>Quartos</label>
-              <select>
-                <option>Qualquer</option>
-                <option>1+</option>
-                <option>2+</option>
-                <option>3+</option>
-                <option>4+</option>
-              </select>
-            </div>
+          <div className="search-group">
+            <label>Faixa de preço</label>
+            <select>
+              <option>Qualquer valor</option>
+              <option>Até R$ 1 Milhão</option>
+              <option>R$ 1M a R$ 5M</option>
+              <option>Acima de R$ 5M</option>
+            </select>
+          </div>
 
-            <div className="search-group search-btn-group">
-              <label>&nbsp;</label>
-              <button className="btn-search">
-                <Search size={20} /> Buscar
-              </button>
-            </div>
+          <div className="search-group">
+            <label>Quartos</label>
+            <select>
+              <option>Qualquer</option>
+              <option>1+</option>
+              <option>2+</option>
+              <option>3+</option>
+              <option>4+</option>
+            </select>
+          </div>
+
+          <div className="search-group search-btn-group">
+            <label>&nbsp;</label>
+            <button className="btn-search">
+              <Search size={20} /> Buscar
+            </button>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Diferenciais */}
       <section className="section stats-section">
