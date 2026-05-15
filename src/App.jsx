@@ -13,6 +13,8 @@ import ImovelDetalhe from './pages/ImovelDetalhe';
 import AreaCliente from './pages/AreaCliente';
 import FaleConosco from './pages/FaleConosco';
 import AdminDashboard from './pages/AdminDashboard';
+import Login from './pages/Login';
+import Cadastro from './pages/Cadastro';
 
 function App() {
   return (
@@ -26,8 +28,14 @@ function App() {
             <Route path="/servicos" element={<Servicos />} />
             <Route path="/imoveis" element={<Catalogo />} />
             <Route path="/imovel/:id" element={<ImovelDetalhe />} />
-            <Route path="/area-cliente" element={<AreaCliente />} />
             <Route path="/fale-conosco" element={<FaleConosco />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/area-cliente" element={
+              <ProtectedRoute>
+                <AreaCliente />
+              </ProtectedRoute>
+            } />
             <Route path="/admin" element={
               <ProtectedRoute requireAdmin={true}>
                 <AdminDashboard />

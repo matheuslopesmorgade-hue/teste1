@@ -1,10 +1,19 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, Building2 } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { currentUser, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    setIsOpen(false);
+    navigate('/login');
+  };
 
   return (
     <header className="navbar glass-dark">
@@ -20,7 +29,19 @@ const Navbar = () => {
           <Link to="/servicos" onClick={() => setIsOpen(false)}>Serviços</Link>
           <Link to="/imoveis" onClick={() => setIsOpen(false)}>Catálogo</Link>
           <Link to="/fale-conosco" onClick={() => setIsOpen(false)}>Contato</Link>
-          <Link to="/area-cliente" className="btn-login" onClick={() => setIsOpen(false)}>Área do Cliente</Link>
+          
+          {!currentUser ? (
+            <Link to="/login" className="btn-login" onClick={() => setIsOpen(false)}>Entrar</Link>
+          ) : (
+            <>
+              {currentUser.role === 'admin' ? (
+                <Link to="/admin" className="btn-login" onClick={() => setIsOpen(false)}>Painel Admin</Link>
+              ) : (
+                <Link to="/area-cliente" className="btn-login" onClick={() => setIsOpen(false)}>Área do Cliente</Link>
+              )}
+              <button className="btn-login" style={{ background: 'transparent', color: 'var(--color-bg)', border: '1px solid var(--color-bg)' }} onClick={handleLogout}>Sair</button>
+            </>
+          )}
         </nav>
 
         <button className="navbar-toggle" onClick={() => setIsOpen(!isOpen)}>

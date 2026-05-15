@@ -64,13 +64,14 @@ const Home = () => {
             <div className="search-group">
               <label>Tipo do Imóvel</label>
               <select>
+                <option>Todos</option>
                 <option>Casa em Condomínio</option>
                 <option>Apartamento</option>
                 <option>Cobertura</option>
                 <option>Comercial</option>
               </select>
             </div>
-            <div className="search-divider"></div>
+            
             <div className="search-group">
               <label>Finalidade</label>
               <select>
@@ -78,14 +79,39 @@ const Home = () => {
                 <option>Alugar</option>
               </select>
             </div>
-            <div className="search-divider"></div>
+            
             <div className="search-group">
               <label>Localização</label>
-              <input type="text" placeholder="Cidade ou Bairro" />
+              <input type="text" placeholder="Bairro ou Cidade" />
             </div>
-            <button className="btn-search">
-              <Search size={20} /> Buscar
-            </button>
+
+            <div className="search-group">
+              <label>Faixa de preço</label>
+              <select>
+                <option>Qualquer valor</option>
+                <option>Até R$ 1 Milhão</option>
+                <option>R$ 1M a R$ 5M</option>
+                <option>Acima de R$ 5M</option>
+              </select>
+            </div>
+
+            <div className="search-group">
+              <label>Quartos</label>
+              <select>
+                <option>Qualquer</option>
+                <option>1+</option>
+                <option>2+</option>
+                <option>3+</option>
+                <option>4+</option>
+              </select>
+            </div>
+
+            <div className="search-group search-btn-group">
+              <label>&nbsp;</label>
+              <button className="btn-search">
+                <Search size={20} /> Buscar
+              </button>
+            </div>
           </div>
         </div>
       </section>

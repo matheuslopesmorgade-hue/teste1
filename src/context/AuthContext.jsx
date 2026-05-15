@@ -21,6 +21,12 @@ export const AuthProvider = ({ children }) => {
   const login = (email, password) => {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
+      if (user.status === 'pending') {
+        return { success: false, message: 'Seu cadastro está em análise. Aguarde aprovação da administradora.' };
+      }
+      if (user.status === 'rejected') {
+        return { success: false, message: 'Seu cadastro foi rejeitado. Por favor, entre em contato com o suporte.' };
+      }
       setCurrentUser(user);
       return { success: true, user };
     }

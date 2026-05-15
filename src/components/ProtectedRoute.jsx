@@ -6,7 +6,7 @@ export const ProtectedRoute = ({ children, requireAdmin }) => {
   const { currentUser } = useContext(AuthContext);
 
   if (!currentUser) {
-    return <Navigate to="/area-cliente" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (requireAdmin && currentUser.role !== 'admin') {

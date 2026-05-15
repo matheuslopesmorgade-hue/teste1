@@ -11,7 +11,7 @@ const initialProperties = [
 
 const initialUsers = [
   { id: 1, name: 'Admin Paula Imob', cpf: '000.000.000-00', email: 'admin@paulaimobiliaria.com.br', phone: '(11) 90000-0000', password: 'admin123', role: 'admin', status: 'approved', bond: 'admin' },
-  { id: 2, name: 'Carlos Aprovado', cpf: '111.111.111-11', email: 'carlos@cliente.com', phone: '(11) 91111-1111', password: 'senha', role: 'client', status: 'approved', bond: 'locatário', propertyId: 4 },
+  { id: 2, name: 'Cliente Aprovado', cpf: '111.111.111-11', email: 'cliente@paulaimobiliaria.com.br', phone: '(11) 91111-1111', password: 'cliente123', role: 'client', status: 'approved', bond: 'locatário', propertyId: 4 },
   { id: 3, name: 'Maria Pendente', cpf: '222.222.222-22', email: 'maria@cliente.com', phone: '(11) 92222-2222', password: 'senha', role: 'client', status: 'pending', bond: 'comprador', propertyId: null },
   { id: 4, name: 'João Rejeitado', cpf: '333.333.333-33', email: 'joao@cliente.com', phone: '(11) 93333-3333', password: 'senha', role: 'client', status: 'rejected', bond: 'locatário', propertyId: null },
 ];
@@ -20,6 +20,11 @@ const initialBoletos = [
   { id: '1023', userId: 2, propertyId: 4, vencimento: '10/05/2026', valor: 'R$ 25.000,00', status: 'pago' },
   { id: '1024', userId: 2, propertyId: 4, vencimento: '10/06/2026', valor: 'R$ 25.000,00', status: 'pendente' },
   { id: '1025', userId: 2, propertyId: 4, vencimento: '10/07/2026', valor: 'R$ 25.000,00', status: 'a vencer' },
+];
+
+const initialSupport = [
+  { id: 1, userId: 2, subject: 'Vazamento na cozinha', status: 'aberto', date: '14/05/2026' },
+  { id: 2, userId: 2, subject: 'Dúvida sobre boleto', status: 'resolvido', date: '10/05/2026' }
 ];
 
 export const DataProvider = ({ children }) => {
@@ -38,9 +43,15 @@ export const DataProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : initialBoletos;
   });
 
+  const [supportRequests, setSupportRequests] = useState(() => {
+    const saved = localStorage.getItem('paula_support');
+    return saved ? JSON.parse(saved) : initialSupport;
+  });
+
   useEffect(() => { localStorage.setItem('paula_users', JSON.stringify(users)); }, [users]);
   useEffect(() => { localStorage.setItem('paula_properties', JSON.stringify(properties)); }, [properties]);
   useEffect(() => { localStorage.setItem('paula_boletos', JSON.stringify(boletos)); }, [boletos]);
+  useEffect(() => { localStorage.setItem('paula_support', JSON.stringify(supportRequests)); }, [supportRequests]);
 
   const addUser = (user) => setUsers(prev => [...prev, { ...user, id: Date.now() }]);
   const updateUser = (id, data) => setUsers(prev => prev.map(u => u.id === id ? { ...u, ...data } : u));
@@ -54,11 +65,15 @@ export const DataProvider = ({ children }) => {
   const updateBoleto = (id, data) => setBoletos(prev => prev.map(b => b.id === id ? { ...b, ...data } : b));
   const deleteBoleto = (id) => setBoletos(prev => prev.filter(b => b.id !== id));
 
+  const addSupportRequest = (req) => setSupportRequests(prev => [...prev, { ...req, id: Date.now() }]);
+  const updateSupportRequest = (id, data) => setSupportRequests(prev => prev.map(r => r.id === id ? { ...r, ...data } : r));
+
   return (
     <DataContext.Provider value={{
       users, addUser, updateUser, deleteUser,
       properties, addProperty, updateProperty, deleteProperty,
-      boletos, addBoleto, updateBoleto, deleteBoleto
+      boletos, addBoleto, updateBoleto, deleteBoleto,
+      supportRequests, addSupportRequest, updateSupportRequest
     }}>
       {children}
     </DataContext.Provider>

@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { MapPin, Bed, Bath, Car, Maximize, Check, Phone, Calculator, Map } from 'lucide-react';
+import { DataContext } from '../context/DataContext';
 import './ImovelDetalhe.css';
 
 const ImovelDetalhe = () => {
   const { id } = useParams();
-  const heroImage = '/hero_bg_house_1778810813317.png';
+  const { properties } = useContext(DataContext);
+  const property = properties.find(p => p.id.toString() === id);
+
+  if (!property) {
+    return (
+      <div className="container section text-center animate-fade-in" style={{minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+        <h2>Imóvel não encontrado.</h2>
+        <p>O imóvel que você está procurando pode ter sido removido ou o link está incorreto.</p>
+      </div>
+    );
+  }
+
+  const handleWhatsApp = (e) => {
+    e.preventDefault();
+    window.open(`https://wa.me/5511999999999?text=Olá, tenho interesse no imóvel: ${property.title} (Ref: ${property.id})`, '_blank');
+  };
+
+  const heroImage = property.image || '/hero_bg_house_1778810813317.png';
   const interiorImage = '/property_interior_1778811052892.png';
 
   return (
@@ -27,23 +45,23 @@ const ImovelDetalhe = () => {
           <div className="flex justify-between items-start mb-4">
             <div>
               <div className="property-tags">
-                <span className="badge badge-primary">Venda</span>
-                <span className="badge badge-outline">Ref: PAU-{id}234</span>
+                <span className="badge badge-primary">{property.type}</span>
+                <span className="badge badge-outline">Ref: PAU-{property.id}</span>
               </div>
-              <h1 className="mt-2">Mansão Contemporânea Alphaville</h1>
-              <p className="location-text"><MapPin size={18}/> Alphaville, Barueri - SP</p>
+              <h1 className="mt-2">{property.title}</h1>
+              <p className="location-text"><MapPin size={18}/> {property.location}</p>
             </div>
             <div className="price-tag">
-              <h2>R$ 12.500.000</h2>
-              <p>Condomínio: R$ 2.500</p>
+              <h2>{property.price}</h2>
+              <p>Condomínio: Consulte</p>
             </div>
           </div>
 
           <div className="property-features-bar">
-            <div className="feat-item"><Bed size={24}/> <span>5 Suítes</span></div>
-            <div className="feat-item"><Bath size={24}/> <span>7 Banheiros</span></div>
-            <div className="feat-item"><Car size={24}/> <span>6 Vagas</span></div>
-            <div className="feat-item"><Maximize size={24}/> <span>800m² Área</span></div>
+            <div className="feat-item"><Bed size={24}/> <span>{property.beds || 0} Quartos</span></div>
+            <div className="feat-item"><Bath size={24}/> <span>{property.baths || 0} Banheiros</span></div>
+            <div className="feat-item"><Car size={24}/> <span>Vagas (consulte)</span></div>
+            <div className="feat-item"><Maximize size={24}/> <span>{property.area || 'N/A'}</span></div>
           </div>
 
           <div className="property-desc mt-4">
@@ -96,8 +114,8 @@ const ImovelDetalhe = () => {
               <input type="email" placeholder="Seu E-mail" />
               <input type="tel" placeholder="Seu Telefone" />
               <textarea placeholder="Olá, tenho interesse neste imóvel."></textarea>
-              <button className="btn btn-primary">Enviar Mensagem</button>
-              <button className="btn btn-whatsapp flex justify-center items-center gap-sm">
+              <button className="btn btn-primary" onClick={(e) => { e.preventDefault(); alert('Mensagem enviada com sucesso! Logo entraremos em contato.'); }}>Enviar Mensagem</button>
+              <button className="btn btn-whatsapp flex justify-center items-center gap-sm" onClick={handleWhatsApp}>
                 <Phone size={18} /> Chamar no WhatsApp
               </button>
             </form>

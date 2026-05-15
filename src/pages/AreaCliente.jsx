@@ -7,7 +7,7 @@ import './AreaCliente.css';
 
 const AreaCliente = () => {
   const { currentUser, login, logout, register } = useContext(AuthContext);
-  const { boletos, properties } = useContext(DataContext);
+  const { boletos, properties, addSupportRequest } = useContext(DataContext);
   const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState(true);
@@ -162,6 +162,23 @@ const AreaCliente = () => {
   const userBoletos = boletos.filter(b => b.userId === currentUser.id);
   const userProperty = properties.find(p => p.id === currentUser.propertyId);
 
+  const handleDownloadPDF = (boletoId) => {
+    alert(`Iniciando download do boleto ${boletoId}.pdf...`);
+  };
+
+  const handleSupport = () => {
+    const assunto = prompt('Descreva resumidamente o motivo do contato (ex: Vazamento, Dúvida no Boleto):');
+    if (assunto) {
+      addSupportRequest({
+        userId: currentUser.id,
+        subject: assunto,
+        status: 'aberto',
+        date: new Date().toLocaleDateString('pt-BR')
+      });
+      alert('Solicitação de suporte enviada com sucesso!');
+    }
+  };
+
   return (
     <div className="dashboard-wrapper animate-fade-in">
       <aside className="dash-sidebar">
@@ -172,7 +189,7 @@ const AreaCliente = () => {
           <a href="#" className="active"><Home size={20}/> Início</a>
           <a href="#"><FileText size={20}/> Meus Contratos</a>
           <a href="#"><FileClock size={20}/> Histórico Financeiro</a>
-          <a href="#"><AlertCircle size={20}/> Suporte</a>
+          <a href="#" onClick={handleSupport}><AlertCircle size={20}/> Suporte</a>
         </nav>
         <div className="dash-user">
           <div className="user-avatar">{currentUser.name.charAt(0)}</div>
@@ -251,9 +268,14 @@ const AreaCliente = () => {
                         </span>
                       </td>
                       <td>
-                        <button className="btn-action" title="Baixar PDF">
-                          <Download size={18} />
-                        </button>
+                        <div className="flex gap-sm">
+                          <button className="btn-action" title="Baixar Boleto PDF" onClick={() => handleDownloadPDF(b.id)}>
+                            <Download size={18} />
+                          </button>
+                          <button className="btn-action text-dash-muted" title="Solicitar 2ª Via" onClick={() => handleSupport()}>
+                            <AlertCircle size={18} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

@@ -9,7 +9,8 @@ const AdminDashboard = () => {
   const { 
     users, updateUser, deleteUser,
     properties, addProperty, updateProperty, deleteProperty,
-    boletos, addBoleto, updateBoleto, deleteBoleto
+    boletos, addBoleto, updateBoleto, deleteBoleto,
+    supportRequests, updateSupportRequest
   } = useContext(DataContext);
 
   const [activeTab, setActiveTab] = useState('users');
@@ -35,6 +36,7 @@ const AdminDashboard = () => {
               <th>E-mail</th>
               <th>CPF</th>
               <th>Vínculo</th>
+              <th>Imóvel Vinculado</th>
               <th>Status</th>
               <th>Ações</th>
             </tr>
@@ -46,6 +48,16 @@ const AdminDashboard = () => {
                 <td>{u.email}</td>
                 <td>{u.cpf}</td>
                 <td style={{textTransform: 'capitalize'}}>{u.bond}</td>
+                <td>
+                  <select 
+                    value={u.propertyId || ''} 
+                    onChange={(e) => updateUser(u.id, { propertyId: e.target.value ? parseInt(e.target.value) : null })}
+                    className="admin-select"
+                  >
+                    <option value="">Nenhum</option>
+                    {properties.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
+                  </select>
+                </td>
                 <td>
                   <span className={`status-badge status-${u.status}`}>
                     {u.status === 'approved' ? 'APROVADO' : u.status === 'pending' ? 'PENDENTE' : 'REJEITADO'}
@@ -111,6 +123,7 @@ const AdminDashboard = () => {
                     <option value="indisponível">Indisponível</option>
                     <option value="vendido">Vendido</option>
                     <option value="alugado">Alugado</option>
+                    <option value="destaque">Destaque</option>
                   </select>
                 </td>
                 <td>
@@ -189,6 +202,51 @@ const AdminDashboard = () => {
     </div>
   );
 
+  const renderSupport = () => (
+    <div className="admin-card">
+      <div className="flex justify-between items-center mb-4">
+        <h2>Solicitações de Suporte</h2>
+      </div>
+      <div className="table-responsive">
+        <table className="dash-table admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Assunto</th>
+              <th>Data</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {supportRequests.map(r => {
+              const u = users.find(u => u.id === r.userId);
+              return (
+                <tr key={r.id}>
+                  <td>{r.id}</td>
+                  <td>{u ? u.name : 'Desconhecido'}</td>
+                  <td>{r.subject}</td>
+                  <td>{r.date}</td>
+                  <td>
+                    <select 
+                      value={r.status} 
+                      onChange={(e) => updateSupportRequest(r.id, { status: e.target.value })}
+                      className="admin-select"
+                    >
+                      <option value="aberto">Aberto</option>
+                      <option value="em andamento">Em Andamento</option>
+                      <option value="resolvido">Resolvido</option>
+                    </select>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
   return (
     <div className="admin-wrapper">
       {/* Sidebar Clarinha com fundo escuro - Mistura Elegante */}
@@ -205,6 +263,9 @@ const AdminDashboard = () => {
           </button>
           <button className={`nav-btn ${activeTab === 'boletos' ? 'active' : ''}`} onClick={() => setActiveTab('boletos')}>
             <FileText size={20}/> Boletos
+          </button>
+          <button className={`nav-btn ${activeTab === 'support' ? 'active' : ''}`} onClick={() => setActiveTab('support')}>
+            <Settings size={20}/> Suporte
           </button>
         </nav>
         <div className="admin-logout">
@@ -227,6 +288,7 @@ const AdminDashboard = () => {
           {activeTab === 'users' && renderUsers()}
           {activeTab === 'properties' && renderProperties()}
           {activeTab === 'boletos' && renderBoletos()}
+          {activeTab === 'support' && renderSupport()}
         </div>
       </main>
     </div>

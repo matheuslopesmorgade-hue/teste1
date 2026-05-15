@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, MapPin, Bed, Building, Filter } from 'lucide-react';
+import { Filter, Search, MapPin, Bed, Building } from 'lucide-react';
+import { DataContext } from '../context/DataContext';
 import './Catalogo.css';
 
 const Catalogo = () => {
   const [filter, setFilter] = useState('Todos');
+  const [searchTerm, setSearchTerm] = useState('');
+  const { properties } = useContext(DataContext);
 
-  const properties = [
-    { id: 1, title: 'Mansão Alphaville', location: 'Alphaville, São Paulo', price: 'R$ 5.500.000', beds: 5, area: '600m²', type: 'Venda', image: '/property_interior_1778811052892.png' },
-    { id: 2, title: 'Cobertura Duplex', location: 'Jardins, São Paulo', price: 'R$ 8.200.000', beds: 4, area: '450m²', type: 'Venda', image: '/hero_bg_house_1778810813317.png' },
-    { id: 3, title: 'Casa em Condomínio', location: 'Tamboré, Barueri', price: 'R$ 3.800.000', beds: 4, area: '380m²', type: 'Venda', image: '/property_interior_1778811052892.png' },
-    { id: 4, title: 'Apartamento Alto Padrão', location: 'Itaim Bibi, São Paulo', price: 'R$ 25.000/mês', beds: 3, area: '220m²', type: 'Aluguel', image: '/property_interior_1778811052892.png' },
-    { id: 5, title: 'Mansão Fazenda Boa Vista', location: 'Porto Feliz, SP', price: 'R$ 15.000.000', beds: 6, area: '1200m²', type: 'Venda', image: '/hero_bg_house_1778810813317.png' },
-    { id: 6, title: 'Loft Moderno', location: 'Vila Olímpia, São Paulo', price: 'R$ 12.000/mês', beds: 1, area: '90m²', type: 'Aluguel', image: '/property_interior_1778811052892.png' },
-  ];
-
-  const filtered = filter === 'Todos' ? properties : properties.filter(p => p.type === filter);
+  const filtered = properties.filter(p => {
+    const matchType = filter === 'Todos' || p.type === filter;
+    const matchSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) || p.location.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchType && matchSearch;
+  });
 
   return (
     <div className="catalogo-page animate-fade-in">
@@ -36,7 +34,12 @@ const Catalogo = () => {
               <label>Busca por Palavra-chave</label>
               <div className="search-input-wrapper">
                 <Search size={18} />
-                <input type="text" placeholder="Código ou nome..." />
+                <input 
+                  type="text" 
+                  placeholder="Código ou nome..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
             </div>
 
